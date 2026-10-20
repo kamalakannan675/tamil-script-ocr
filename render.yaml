@@ -21,14 +21,12 @@ services:
         value: "backend/models/tamil_crnn.pt"
 
   # Static Frontend Site (React Vite)
-  - type: static-site
+  - type: web
     name: tamil-script-ocr-frontend
+    runtime: static
     buildCommand: "cd frontend && npm ci && npm run build"
-    publishPath: "frontend/dist"
+    staticPublishPath: "frontend/dist"
     routes:
-      - type: rewrite
-        source: "/api/*"
-        destination: "https://tamil-script-ocr-backend.onrender.com/api/*"
       - type: rewrite
         source: "/*"
         destination: "/index.html"
