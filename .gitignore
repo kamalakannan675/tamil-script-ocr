@@ -55,6 +55,7 @@ desktop.ini
 *.swp
 *.swo
 
-# Large checkpoints (Keep base tamil_crnn.pt for genuine OCR inference, ignore training checkpoints)
+# Large checkpoints (Keep base backend/models/tamil_crnn.pt for genuine OCR inference, ignore training checkpoints)
+ml/checkpoints/*.pt
 ml/checkpoints/*.tmp
 ml/checkpoints/checkpoint_epoch_*.pt
