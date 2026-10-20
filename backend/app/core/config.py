@@ -19,11 +19,18 @@ class Config:
     ALLOWED_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | ALLOWED_DOCUMENT_EXTENSIONS
 
     # Model configuration
-    # Check default model checkpoint locations
-    CRNN_MODEL_PATH = os.getenv(
-        "CRNN_MODEL_PATH",
-        str(MODELS_DIR / "tamil_crnn.pt")
-    )
+    # Robustly resolve CRNN model checkpoint path whether running from root or backend/
+    _raw_model_path = os.getenv("CRNN_MODEL_PATH", str(MODELS_DIR / "tamil_crnn.pt"))
+    if not os.path.isabs(_raw_model_path):
+        if (BASE_DIR / _raw_model_path).exists():
+            CRNN_MODEL_PATH = str(BASE_DIR / _raw_model_path)
+        elif (BASE_DIR.parent / _raw_model_path).exists():
+            CRNN_MODEL_PATH = str(BASE_DIR.parent / _raw_model_path)
+        else:
+            CRNN_MODEL_PATH = str(MODELS_DIR / "tamil_crnn.pt")
+    else:
+        CRNN_MODEL_PATH = _raw_model_path
+
     ALT_CRNN_PATH = str(ML_CHECKPOINTS_DIR / "tamil_crnn.pt")
     
     DEVICE = os.getenv("DEVICE", "cpu")
